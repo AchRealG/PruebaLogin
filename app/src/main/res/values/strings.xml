@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">PruebaLogin</string>
+    <string name="title">Title</string>
+    <string name="content">Content</string>
+    <string name="url">URL</string>
+    <string name="save">Save</string>
+    <string name="title2">Title</string>
+    <string name="content2">Content</string>
+    <string name="url3">URL</string>
+</resources>
