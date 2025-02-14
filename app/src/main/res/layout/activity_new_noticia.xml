@@ -9,23 +9,35 @@
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/title" />
+        android:hint="@string/t_tulo" />
 
     <EditText
         android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/content" />
+        android:hint="@string/contenido" />
 
     <EditText
-        android:id="@+id/url"
+        android:id="@+id/fecha"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/url" />
+        android:hint="@string/fecha" />
+
+    <EditText
+        android:id="@+id/imageurl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/url_de_la_imagen" />
+
+    <EditText
+        android:id="@+id/noticiaurl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/url_de_la_noticia" />
 
     <Button
         android:id="@+id/save_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/save" />
+        android:text="@string/guardar" />
 </LinearLayout>

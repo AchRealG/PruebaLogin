@@ -1,15 +1,22 @@
 package com.acalabuig.pruebalogin
 
 import androidx.room.*
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.Query
+import androidx.room.Update
 
 @Dao
 interface LikesDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(like: LikesEntity)
+    @Insert
+    suspend fun insert(like: LikesEntity)
 
     @Delete
-    fun delete(like: LikesEntity)
+    suspend fun delete(like: LikesEntity)
 
-    @Query("SELECT * FROM noticias INNER JOIN ON noticias.id = likes.noticiaId WHERE likes.userId = :userId")
-    fun getLikedNoticias(userId: Int): List<NoticiaEntity>
+    @Update
+    suspend fun actualizarFavorito(like: LikesEntity)
+
+    @Query("SELECT * FROM LikesEntity WHERE userId = :userId")
+    suspend fun getLikedNoticias(userId: Long): MutableList<LikesEntity>
 }

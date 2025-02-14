@@ -3,6 +3,7 @@ package com.acalabuig.pruebalogin
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 
@@ -21,5 +22,5 @@ interface UserDao {
     suspend fun deleteUser(userEntity: UserEntity)
 
     @Query("SELECT * FROM UserEntity WHERE name = :username AND password = :password")
-     fun getUser(username: String, password: String): UserEntity
+     suspend fun getUser(username: String, password: String): UserEntity?
 }

@@ -8,4 +8,8 @@ abstract class UserDatabase: RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun noticiaDao(): NoticiaDao
     abstract fun likesDao(): LikesDao
+
+
+
+
 }

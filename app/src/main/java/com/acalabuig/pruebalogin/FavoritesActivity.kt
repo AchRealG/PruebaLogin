@@ -5,6 +5,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
+import com.acalabuig.pruebalogin.UserApplication.Companion.database
+import com.acalabuig.pruebalogin.databinding.ActivityFavoritesBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -12,27 +14,40 @@ import kotlinx.coroutines.launch
 class FavoritesActivity : AppCompatActivity() {
     private lateinit var db: UserDatabase
     private lateinit var noticiasAdapter: NoticiasAdapter
+    private val currentUserId: Int = 1
+
+    private lateinit var binding: ActivityFavoritesBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_favorites)
 
-        db = Room.databaseBuilder(applicationContext, UserDatabase::class.java, "app-database").build()
+       // db = UserDatabase.getInstance(this)
+        db = Room.databaseBuilder(applicationContext, UserDatabase::class.java, "UserDatabase").build()
 
-        val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
+        val recyclerView = findViewById<RecyclerView>(R.id.recyclerViewFavorites)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        noticiasAdapter = NoticiasAdapter()
+
+        noticiasAdapter = NoticiasAdapter(this, db)
         recyclerView.adapter = noticiasAdapter
 
-        loadFavorites()
+        val noticiaActualizada = NoticiaEntity(
+            id = id,
+            title = et_titulo.text.toString(),
+            content = et_descripcion.text.toString(),
+            fecha = et_fecha.text.toString(),
+            esFavorita = esFavorita,
+            imageurl = imagenUrl,
+            noticiaurl = noticiaUrl)
+
+        loadFavorites(noticiaActualizada)
     }
 
-    private fun loadFavorites() {
+    private fun loadFavorites(noticiaActualizada: NoticiaEntity) {
         lifecycleScope.launch(Dispatchers.IO) {
-            val favorites = db.likesDao().getLikedNoticias(currentUserId)
-            lifecycleScope.launch(Dispatchers.IO) {
-                noticiasAdapter.setNoticias(favorites)
-            }
+          UserApplication
+            database.noticiaDao().update(noticiaActualizada)
+
         }
     }
 }

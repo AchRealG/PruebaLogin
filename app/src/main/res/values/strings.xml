@@ -4,7 +4,22 @@
     <string name="content">Content</string>
     <string name="url">URL</string>
     <string name="save">Save</string>
+    <string name="remember">Recordar</string>
+    <string name="userName">NombreUsuario</string>
+    <string name="userPassword">ContrasenaUsuario</string>
+    <string name="rememberText">Recordarme</string>
     <string name="title2">Title</string>
     <string name="content2">Content</string>
     <string name="url3">URL</string>
+    <string name="favorites">Favorites</string>
+    <string name="add">Add</string>
+    <string name="button">Button</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="t_tulo">Título</string>
+    <string name="contenido">Contenido</string>
+    <string name="fecha">Fecha</string>
+    <string name="url_de_la_imagen">URL de la imagen</string>
+    <string name="url_de_la_noticia">URL de la noticia</string>
+    <string name="guardar">Guardar</string>
 </resources>

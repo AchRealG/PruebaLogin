@@ -1,13 +1,15 @@
 package com.acalabuig.pruebalogin
+
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.room.Room
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-
+import kotlinx.coroutines.withContext
 
 class NewNoticiaActivity : AppCompatActivity() {
     private lateinit var db: UserDatabase
@@ -20,18 +22,36 @@ class NewNoticiaActivity : AppCompatActivity() {
 
         val titleEditText = findViewById<EditText>(R.id.title)
         val contentEditText = findViewById<EditText>(R.id.content)
-        val urlEditText = findViewById<EditText>(R.id.url)
+        val fechaEditText = findViewById<EditText>(R.id.fecha)
+        val imageUrlEditText = findViewById<EditText>(R.id.imageurl)
+        val noticiaUrlEditText = findViewById<EditText>(R.id.noticiaurl)
         val saveButton = findViewById<Button>(R.id.save_button)
 
         saveButton.setOnClickListener {
             val title = titleEditText.text.toString()
             val content = contentEditText.text.toString()
-            val url = urlEditText.text.toString()
+            val fecha = fechaEditText.text.toString()
+            val imageUrl = imageUrlEditText.text.toString()
+            val noticiaUrl = noticiaUrlEditText.text.toString()
 
-            lifecycleScope.launch(Dispatchers.IO) {
-                db.noticiaDao().insert(NoticiaEntity(title = title, content = content, url = url))
+            if (title.isNotEmpty() && content.isNotEmpty() && fecha.isNotEmpty() && imageUrl.isNotEmpty() && noticiaUrl.isNotEmpty()) {
                 lifecycleScope.launch(Dispatchers.IO) {
-                    finish()
+                    val noticia = NoticiaEntity(
+                        title = title,
+                        content = content,
+                        fecha = fecha,
+                        imageurl = imageUrl,
+                        noticiaurl = noticiaUrl
+                    )
+                    db.noticiaDao().insert(noticia)
+                    withContext(Dispatchers.Main) {
+                        finish()
+                    }
+                }
+            } else {
+                // Show a message to the user indicating that all fields are required
+                runOnUiThread  {
+                    Toast.makeText(this@NewNoticiaActivity, "Todos los campos son obligatorios", Toast.LENGTH_SHORT).show()
                 }
             }
         }

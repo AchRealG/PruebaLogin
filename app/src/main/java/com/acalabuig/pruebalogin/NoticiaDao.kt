@@ -1,17 +1,18 @@
 package com.acalabuig.pruebalogin
 import androidx.room.*
 
+
 @Dao
 interface NoticiaDao {
-    @Query("SELECT * FROM noticias")
-    fun getAllNoticias(): List<NoticiaEntity>
+    @Query("SELECT * FROM NoticiaEntity")
+    suspend fun getAllNoticias(): MutableList<NoticiaEntity>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(noticia: NoticiaEntity)
+    @Insert
+    suspend fun insert(noticia: NoticiaEntity)
 
     @Update
-    fun update(noticia: NoticiaEntity)
+    suspend fun update(noticia: NoticiaEntity)
 
     @Delete
-    fun delete(noticia: NoticiaEntity)
+    suspend fun delete(noticia: NoticiaEntity)
 }
