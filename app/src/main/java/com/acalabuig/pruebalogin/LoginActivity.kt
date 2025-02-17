@@ -1,6 +1,4 @@
 package com.acalabuig.pruebalogin
-
-
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -28,23 +26,33 @@ class LoginActivity : AppCompatActivity() {
         preferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
 
         // Inicializar Base de Datos
-        db = Room.databaseBuilder(applicationContext, UserDatabase::class.java, "app-database").build()
+        db = Room.databaseBuilder(applicationContext, UserDatabase::class.java, "UserDatabase")
+            .fallbackToDestructiveMigration()
+            .build()
 
         // Comprobar si el usuario está guardado en SharedPreferences
         checkRememberedUser()
 
         // Botón de Login
         binding.login.setOnClickListener {
-            val username = binding.usuario.text.toString()
-            val password = binding.password.text.toString()
-            loginUser(username, password)
+            val username = binding.usuario.text.toString().trim()
+            val password = binding.password.text.toString().trim()
+            if (username.isNotEmpty() && password.isNotEmpty()) {
+                loginUser(username, password)
+            } else {
+                showToast("Por favor, introduce usuario y contraseña")
+            }
         }
 
         // Botón de Registro
         binding.register.setOnClickListener {
-            val username = binding.usuario.text.toString()
-            val password = binding.password.text.toString()
-            registerUser(username, password)
+            val username = binding.usuario.text.toString().trim()
+            val password = binding.password.text.toString().trim()
+            if (username.isNotEmpty() && password.isNotEmpty()) {
+                registerUser(username, password)
+            } else {
+                showToast("Por favor, introduce usuario y contraseña")
+            }
         }
     }
 
@@ -54,9 +62,7 @@ class LoginActivity : AppCompatActivity() {
         val rememberMe = preferences.getBoolean("remember", false)
 
         if (rememberMe && rememberedUser != null && rememberedPassword != null) {
-            binding.usuario.setText(rememberedUser)
-            binding.password.setText(rememberedPassword)
-            binding.cbRememberMe.isChecked = true
+            goToMainActivity(rememberedUser)
         }
     }
 
@@ -70,34 +76,31 @@ class LoginActivity : AppCompatActivity() {
                     } else {
                         clearUserPreferences()
                     }
-                    Toast.makeText(this@LoginActivity, "Bienvenido $username", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                    intent.putExtra("Usuario", username)
-                    startActivity(intent)
+                    showToast("Bienvenido $username")
+                    goToMainActivity(username)
                 } else {
-                    Toast.makeText(this@LoginActivity, "Credenciales inválidas", Toast.LENGTH_SHORT).show()
+                    showToast("Credenciales inválidas")
                 }
             }
         }
     }
 
     private fun registerUser(username: String, password: String) {
-        if (username.isNotEmpty() && password.isNotEmpty()) {
-            lifecycleScope.launch(Dispatchers.IO) {
-                val existingUser = db.userDao().getUser(username, password)
-                withContext(Dispatchers.Main) {
-                    if (existingUser != null) {
-                        Toast.makeText(this@LoginActivity, "Usuario duplicado", Toast.LENGTH_SHORT).show()
-                    } else {
-                        val newUser = UserEntity(name = username, password = password)
+        lifecycleScope.launch(Dispatchers.IO) {
+            val existingUser = db.userDao().getUser(username,password)
+            withContext(Dispatchers.Main) {
+                if (existingUser != null) {
+                    showToast("Usuario ya existe")
+                } else {
+                    val newUser = UserEntity(name = username, password = password)
+                    lifecycleScope.launch(Dispatchers.IO) {
                         db.userDao().addUser(newUser)
-                        saveUserPreferences(username, password)
-                        Toast.makeText(this@LoginActivity, "Usuario registrado", Toast.LENGTH_SHORT).show()
+                        withContext(Dispatchers.Main) {
+                            showToast("Usuario registrado correctamente")
+                        }
                     }
                 }
             }
-        } else {
-            Toast.makeText(this, "Datos inválidos", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -112,5 +115,18 @@ class LoginActivity : AppCompatActivity() {
 
     private fun clearUserPreferences() {
         preferences.edit().clear().apply()
+    }
+
+    private fun goToMainActivity(username: String) {
+        runOnUiThread {
+            val intent = Intent(this, MainActivity::class.java)
+            intent.putExtra("Usuario", username)
+            startActivity(intent)
+            finish()
+        }
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

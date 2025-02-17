@@ -1,7 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    //kotlin("kapt")
+    id("kotlin-kapt")
     id("com.google.devtools.ksp")
 }
 
@@ -56,7 +56,9 @@ dependencies {
     // Room
     implementation("androidx.room:room-runtime:$roomVersion")
 
-
+    // Glide
+    implementation("com.github.bumptech.glide:glide:4.13.2")
+    kapt("com.github.bumptech.glide:compiler:4.13.2")
     // Anko Commons
    // implementation("org.jetbrains.anko:anko-commons:$ankoVersion")
 

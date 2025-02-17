@@ -3,14 +3,10 @@ package com.acalabuig.pruebalogin
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.room.Room
 import com.acalabuig.pruebalogin.databinding.ActivityMainBinding
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -76,6 +72,48 @@ class MainActivity : AppCompatActivity() , OnClickListener{
             withContext(Dispatchers.Main) {
                 adaptadorNoticias.establecerNoticias(noticias)
             }
+        }
+    }
+
+    override fun OnClick(noticiaEntity: NoticiaEntity) {
+        val intent = Intent(this, FavoritesActivity::class.java)
+        intent.putExtra("Noticia", noticiaEntity)
+        intent.putExtra("Usuario", usuario)
+        startActivity(intent)
+    }
+
+    override fun OnClickFavorite(noticiaEntity: NoticiaEntity) {
+        noticiaEntity.esFavorita = !noticiaEntity.esFavorita
+        adaptadorNoticias.actualizar(noticiaEntity)
+        lifecycleScope.launch(Dispatchers.IO) {
+            // Esto asignará -1 en caso de que usuario sea null. (No debería)
+
+            val favoritoEntity = LikesEntity(usuario?.id ?: -1, noticiaEntity.id)
+            if (noticiaEntity.esFavorita) {
+                UserApplication
+                    .database
+                    .likesDao()
+                    .insert(favoritoEntity)
+            } else {
+                UserApplication
+                    .database
+                    .likesDao()
+                    .delete(favoritoEntity)
+            }
+            UserApplication
+                .database
+                .noticiaDao()
+                .update(noticiaEntity)
+        }
+    }
+
+    override fun OnDelete(noticiaEntity: NoticiaEntity) {
+        adaptadorNoticias.eliminar(noticiaEntity)
+        lifecycleScope.launch(Dispatchers.IO) {
+            UserApplication
+                .database
+                .noticiaDao()
+                .delete(noticiaEntity)
         }
     }
 

@@ -1,4 +1,5 @@
 package com.acalabuig.pruebalogin
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -12,6 +13,8 @@ import kotlinx.coroutines.launch
 
 
 class FavoritesActivity : AppCompatActivity() {
+
+    private  var usuario: UserEntity? = null
     private lateinit var db: UserDatabase
     private lateinit var noticiasAdapter: NoticiasAdapter
     private val currentUserId: Int = 1
@@ -22,25 +25,47 @@ class FavoritesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_favorites)
 
-       // db = UserDatabase.getInstance(this)
-        db = Room.databaseBuilder(applicationContext, UserDatabase::class.java, "UserDatabase").build()
+        usuario = intent.getSerializableExtra("Usuario") as? UserEntity
 
-        val recyclerView = findViewById<RecyclerView>(R.id.recyclerViewFavorites)
-        recyclerView.layoutManager = LinearLayoutManager(this)
 
-        noticiasAdapter = NoticiasAdapter(this, db)
-        recyclerView.adapter = noticiasAdapter
+        binding = ActivityFavoritesBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val noticiaActualizada = NoticiaEntity(
-            id = id,
-            title = et_titulo.text.toString(),
-            content = et_descripcion.text.toString(),
-            fecha = et_fecha.text.toString(),
-            esFavorita = esFavorita,
-            imageurl = imagenUrl,
-            noticiaurl = noticiaUrl)
+        val noticiaObtenida = intent.getSerializableExtra("Noticia") as NoticiaEntity
 
-        loadFavorites(noticiaActualizada)
+
+        val titulo: String = noticiaObtenida.title
+        val descripcion: String = noticiaObtenida.content
+        val fecha: String = noticiaObtenida.fecha
+
+        val et_titulo = binding.insertarTitulo
+        val et_descripcion = binding.insertarResumen
+        val et_fecha = binding.insertarFecha
+        val btn_actualizar = binding.btnGuardar
+
+        et_titulo.setText(titulo)
+        et_descripcion.setText(descripcion)
+        et_fecha.setText(fecha)
+
+        btn_actualizar.setOnClickListener {
+            val id = noticiaObtenida.id
+            val esFavorita = noticiaObtenida.esFavorita
+            val imagenUrl = noticiaObtenida.imageurl
+            val noticiaUrl = noticiaObtenida.noticiaurl
+            val noticiaActualizada = NoticiaEntity(
+                id = id,
+                title = et_titulo.text.toString(),
+                content = et_descripcion.text.toString(),
+                fecha = et_fecha.text.toString(),
+                esFavorita = esFavorita,
+                imageurl = imagenUrl,
+                noticiaurl = noticiaUrl)
+            loadFavorites(noticiaActualizada)
+            intent = Intent(this, MainActivity::class.java)
+            intent.putExtra("Usuario", usuario)
+            startActivity(intent)
+        }
+
     }
 
     private fun loadFavorites(noticiaActualizada: NoticiaEntity) {

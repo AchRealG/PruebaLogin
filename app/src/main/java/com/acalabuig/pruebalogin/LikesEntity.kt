@@ -2,7 +2,6 @@ package com.acalabuig.pruebalogin
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
 
 @Entity(tableName = "LikesEntity", primaryKeys = ["userId", "noticiaId"], foreignKeys = [ForeignKey(entity = UserEntity::class, parentColumns = ["id"], childColumns = ["userId"], onDelete = ForeignKey.CASCADE),
                                                                                    ForeignKey(entity = NoticiaEntity::class, parentColumns = ["id"], childColumns = ["noticiaId"], onDelete = ForeignKey.CASCADE)
@@ -11,5 +10,5 @@ import androidx.room.PrimaryKey
 data class LikesEntity(
 
     val noticiaId: Long,
-    val userId: Long
+    val userId: Int
 )

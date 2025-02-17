@@ -22,4 +22,16 @@
     <string name="url_de_la_imagen">URL de la imagen</string>
     <string name="url_de_la_noticia">URL de la noticia</string>
     <string name="guardar">Guardar</string>
+    <string name="image_description">Imagen\n</string>
+    <string name="t_tulo_de_la_noticia">Título </string>
+    <string name="descripci_n_breve_de_la_noticia_m_ximo_dos_l_neas_de_texto">Descripción breve de la noticia. Máximo dos líneas de texto.</string>
+    <string name="_20_de_enero_de_2025">20 de enero de 2025</string>
+    <string name="like_button">Botón de like\\n</string>
+    <string name="abrir_noticia">ver</string>
+    <string name="resumen">resumen\n</string>
+    <string name="inserte_la_fecha">Date</string>
+    <string name="fecha_dd_mm_aaaa">"fecha "</string>
+    <string name="actualizar">Load\n</string>
+    <string name="inserte_el_t_tulo_de_la_noticia">Title\n</string>
+    <string name="inserte_el_resumen_de_la_noticia">Resume\n</string>
 </resources>

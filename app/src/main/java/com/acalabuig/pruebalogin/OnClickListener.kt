@@ -1,9 +1,9 @@
 package com.acalabuig.pruebalogin
 
 interface OnClickListener {
-    fun alHacerClic(noticiaEntity: NoticiaEntity)
+    fun OnClick(noticiaEntity: NoticiaEntity)
 
-    fun alDarleAFavorito(noticiaEntity: NoticiaEntity)
+    fun OnClickFavorite(noticiaEntity: NoticiaEntity)
 
-    fun alEliminar(noticiaEntity: NoticiaEntity)
+    fun OnDelete(noticiaEntity: NoticiaEntity)
 }
