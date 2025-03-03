@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity() , OnClickListener{
         noticiaEntity.esFavorita = !noticiaEntity.esFavorita
         adaptadorNoticias.actualizar(noticiaEntity)
         lifecycleScope.launch(Dispatchers.IO) {
-            // Esto asignará -1 en caso de que usuario sea null. (No debería)
+
 
             val favoritoEntity = LikesEntity(usuario?.id ?: -1, noticiaEntity.id)
             if (noticiaEntity.esFavorita) {
